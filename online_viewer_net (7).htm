@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"> <!-- اللغة العربية والاتجاه من اليمين لليسار -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palestine Job Directory</title> <!-- العنوان بالإنجليزية -->
+    <!-- تحميل Tailwind CSS للتصميم -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- تحميل خط Cairo من Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* استخدام خط Cairo لجميع عناصر الصفحة */
+        body {
+            font-family: 'Cairo', sans-serif;
+            /* خلفية متدرجة لجذب الانتباه */
+            background: linear-gradient(to bottom right, #f0f4f8, #e0e7ed);
+            color: #334155; /* لون نص أساسي داكن قليلاً */
+        }
+        /* تأثير انتقال سلس لبطاقات الشركات */
+        .company-card {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            border-radius: 1rem; /* حواف أكثر استدارة للبطاقات */
+        }
+        /* تأثير تكبير وظل عند مرور الماوس فوق البطاقة */
+        .company-card:hover {
+            transform: translateY(-12px) scale(1.02); /* تكبير طفيف وتحريك للأعلى */
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 10px 15px -3px rgba(0, 0, 0, 0.1); /* ظل أعمق */
+        }
+        /* تخصيص شكل القوائم المنسدلة */
+        .custom-select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: left 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-left: 2.5rem;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        /* تصميم زر الاتصال بتدرج لوني */
+        .contact-button {
+            background: linear-gradient(to right, #10b981, #059669); /* تدرج أخضر جميل */
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); /* ظل للزر */
+        }
+        .contact-button:hover {
+            background: linear-gradient(to left, #059669, #10b981); /* تدرج عكسي عند التحويم */
+            box-shadow: 0 6px 15px rgba(16, 185, 129, 0.4);
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- الترويسة -->
+    <header class="bg-white shadow-lg sticky top-0 z-10 border-b border-gray-200">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-3xl font-bold text-blue-700">Palestine Job Directory</div> <!-- العنوان الرئيسي بالإنجليزية -->
+            <div class="text-gray-600 font-semibold">ابحث عن فرصتك</div>
+        </div>
+    </header>
+
+    <!-- الحاوية الرئيسية للتطبيق -->
+    <div class="container mx-auto p-4 md:p-8 max-w-6xl">
+
+        <!-- رأس الصفحة -->
+        <section class="text-center mb-12">
+            <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900 leading-tight">اعثر على أفضل شركات التوظيف</h1>
+            <p class="text-gray-700 mt-4 text-xl">استخدم الفلاتر المتقدمة لتحديد بحثك والعثور على الشركة المناسبة لمستقبلك المهني.</p>
+        </section>
+
+        <!-- قسم الفلاتر والبحث -->
+        <div class="bg-white p-8 rounded-2xl shadow-xl mb-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-end">
+                <!-- البحث بالاسم -->
+                <div>
+                    <label for="searchInput" class="block mb-2 font-semibold text-gray-700">ابحث بالاسم</label>
+                    <input type="text" id="searchInput" placeholder="اكتب اسم الشركة..." class="w-full p-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-blue-300 transition duration-200 ease-in-out shadow-sm">
+                </div>
+                <!-- فلتر المدينة -->
+                <div>
+                    <label for="cityFilter" class="block mb-2 font-semibold text-gray-700">المدينة</label>
+                    <select id="cityFilter" class="custom-select w-full p-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-blue-300 transition duration-200 ease-in-out bg-white shadow-sm">
+                        <option value="">كل المدن</option>
+                    </select>
+                </div>
+                <!-- فلتر التخصص -->
+                <div>
+                    <label for="specialtyFilter" class="block mb-2 font-semibold text-gray-700">التخصص</label>
+                    <select id="specialtyFilter" class="custom-select w-full p-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-blue-300 transition duration-200 ease-in-out bg-white shadow-sm">
+                        <option value="">كل التخصصات</option>
+                    </select>
+                </div>
+                <!-- زر مسح الفلاتر -->
+                <button id="resetButton" class="w-full bg-gray-700 text-white p-3 rounded-lg hover:bg-gray-800 transition duration-200 ease-in-out font-semibold text-lg shadow-md hover:shadow-lg">مسح الفلاتر</button>
+            </div>
+        </div>
+
+        <!-- قسم عرض نتائج البحث -->
+        <main id="resultsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- سيتم إدراج بطاقات الشركات هنا بواسطة JavaScript -->
+        </main>
+        
+        <!-- رسالة عند عدم العثور على نتائج -->
+        <div id="noResultsMessage" class="hidden text-center py-16">
+            <h3 class="text-3xl font-semibold text-gray-700 mb-3">لم يتم العثور على نتائج 😔</h3>
+            <p class="text-gray-500 text-lg">نأسف، لم نجد أي شركة تطابق بحثك. حاول تعديل الفلاتر أو البحث بكلمات مختلفة.</p>
+        </div>
+
+    </div>
+
+    <!-- الذيل -->
+    <footer class="bg-gray-900 text-white mt-16 py-6">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2024 Palestine Job Directory. جميع الحقوق محفوظة.</p> <!-- نص الفوتر بالإنجليزية والعربية -->
+        </div>
+    </footer>
+
+    <script>
+        // --- بيانات الشركات (بيانات وهمية موسعة لشركات في فلسطين) ---
+        const companies = [
+            { 
+                name: 'خبراء فلسطين للتوظيف', // اسم الشركة بالعربية
+                city: 'رام الله', 
+                specialties: ['تقنية المعلومات', 'الاتصالات'], 
+                description: 'متخصصون في توظيف أفضل المواهب في قطاع التكنولوجيا والاتصالات.', 
+                jobDetails: 'لدينا فرص عمل مثيرة للمهندسين والمطورين في مجالات الذكاء الاصطناعي وتطوير الويب.',
+                logo: 'https://placehold.co/100x100/3498db/ffffff?text=خبراء',
+                contactEmail: 'info@experts.ps',
+                contactPhone: '+970591234567',
+                workingHours: 'الأحد - الخميس: 9:00 ص - 5:00 م'
+            },
+            { 
+                name: 'مواهب نابلس', 
+                city: 'نابلس', 
+                specialties: ['التسويق', 'المبيعات', 'الإعلان'], 
+                description: 'نساعد الشركات في العثور على قادة المبيعات والتسويق القادمين.', 
+                jobDetails: 'نبحت عن متخصصي تسويق رقمي ومديري حسابات مبيعات ذوي خبرة.',
+                logo: 'https://placehold.co/100x100/2ecc71/ffffff?text=مواهب',
+                contactEmail: 'talents@nablus.ps',
+                contactPhone: '+970567890123',
+                workingHours: 'السبت - الأربعاء: 8:30 ص - 4:30 م'
+            },
+            { 
+                name: 'حلول الخليل البشرية', 
+                city: 'الخليل', 
+                specialties: ['الصناعة', 'الإدارة', 'اللوجستيات'], 
+                description: 'نقدم حلول توظيف شاملة واستشارات في قطاع الصناعة.', 
+                jobDetails: 'فرص للمهندسين الصناعيين، مديري الإنتاج، وموظفي سلسلة التوريد.',
+                logo: 'https://placehold.co/100x100/e74c3c/ffffff?text=حلول',
+                contactEmail: 'hebron.hr@solutions.ps',
+                contactPhone: '+970599876543',
+                workingHours: 'الأحد - الخميس: 8:00 ص - 4:00 م'
+            },
+            { 
+                name: 'إبداع غزة', 
+                city: 'غزة', 
+                specialties: ['المنظمات غير الحكومية', 'الإعلام'], 
+                description: 'نوصل المبدعين والمختصين بأفضل الفرص في المنظمات والمؤسسات الإعلامية.', 
+                jobDetails: 'نبحث عن منسقي مشاريع، متخصصي إعلام، ومصممي جرافيك.',
+                logo: 'https://placehold.co/100x100/f1c40f/ffffff?text=إبداع',
+                contactEmail: 'creativity@gaza.ps',
+                contactPhone: '+970598765432',
+                workingHours: 'الأحد - الخميس: 9:00 ص - 4:00 م'
+            },
+            { 
+                name: 'الشبكة الاقتصادية', 
+                city: 'رام الله', 
+                specialties: ['المالية', 'المحاسبة', 'البنوك'], 
+                description: 'خبراء في توظيف الكفاءات في القطاع المالي والمصرفي الفلسطيني.', 
+                jobDetails: 'وظائف للمحاسبين، المحللين الماليين، ومديري البنوك.',
+                logo: 'https://placehold.co/100x100/9b59b6/ffffff?text=الشبكة',
+                contactEmail: 'economic@network.ps',
+                contactPhone: '+970592345678',
+                workingHours: 'الأحد - الخميس: 8:30 ص - 3:30 م'
+            },
+            { 
+                name: 'رواد الهندسة', 
+                city: 'بيرزيت', 
+                specialties: ['الهندسة المدنية', 'الهندسة المعمارية', 'الإنشاءات'], 
+                description: 'متخصصون في ربط الكوادر الهندسية المتميزة بشركات المقاولات.', 
+                jobDetails: 'نبحث عن مهندسين مدنيين ومعماريين حديثي التخرج وذوي خبرة.',
+                logo: 'https://placehold.co/100x100/1abc9c/ffffff?text=رواد',
+                contactEmail: 'pioneers@engineering.ps',
+                contactPhone: '+970593456789',
+                workingHours: 'السبت - الخميس: 7:00 ص - 4:00 م'
+            },
+            { 
+                name: 'كفاءات بيت لحم', 
+                city: 'بيت لحم', 
+                specialties: ['السياحة', 'الفندقة'], 
+                description: 'الخيار الأول لتوظيف الكفاءات في قطاع السياحة والفندقة.', 
+                jobDetails: 'فرص للمرشدين السياحيين، مديري الفنادق، وموظفي الاستقبال.',
+                logo: 'https://placehold.co/100x100/e67e22/ffffff?text=كفاءات',
+                contactEmail: 'bethlehem@talents.ps',
+                contactPhone: '+970594567890',
+                workingHours: 'على مدار الساعة'
+            },
+            { 
+                name: 'طاقات جنين الزراعية', 
+                city: 'جنين', 
+                specialties: ['الزراعة', 'الهندسة الزراعية'], 
+                description: 'نربط المهندسين الزراعيين والخبراء بأكبر الشركات الزراعية.', 
+                jobDetails: 'نبحث عن مهندسين زراعيين ومتخصصين في إدارة المزارع.',
+                logo: 'https://placehold.co/100x100/27ae60/ffffff?text=طاقات',
+                contactEmail: 'jenin.agri@powers.ps',
+                contactPhone: '+970595678901',
+                workingHours: 'الأحد - الخميس: 7:30 ص - 3:30 م'
+            }
+        ];
+
+        // --- الوصول إلى عناصر الصفحة ---
+        const searchInput = document.getElementById('searchInput');
+        const cityFilter = document.getElementById('cityFilter');
+        const specialtyFilter = document.getElementById('specialtyFilter');
+        const resetButton = document.getElementById('resetButton');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const noResultsMessage = document.getElementById('noResultsMessage');
+
+        // --- دالة لملء الفلاتر تلقائياً من البيانات ---
+        function populateFilters() {
+            const cities = [...new Set(companies.map(c => c.city))];
+            const specialties = [...new Set(companies.flatMap(c => c.specialties))];
+
+            cities.sort().forEach(city => {
+                const option = document.createElement('option');
+                option.value = city;
+                option.textContent = city;
+                cityFilter.appendChild(option);
+            });
+
+            specialties.sort().forEach(specialty => {
+                const option = document.createElement('option');
+                option.value = specialty;
+                option.textContent = specialty;
+                specialtyFilter.appendChild(option);
+            });
+        }
+        
+        // --- دالة لعرض الشركات في الصفحة ---
+        function displayCompanies(companiesList) {
+            resultsContainer.innerHTML = '';
+            noResultsMessage.classList.toggle('hidden', companiesList.length > 0);
+
+            companiesList.forEach(company => {
+                const card = document.createElement('div');
+                card.className = 'company-card bg-white rounded-xl border border-gray-100 shadow-lg flex flex-col text-center overflow-hidden p-6 hover:shadow-2xl'; /* تحسين ظل البطاقة */
+                
+                // إنشاء وسوم التخصصات
+                const specialtiesHtml = company.specialties.map(spec => 
+                    `<span class="bg-blue-200 text-blue-900 text-sm font-medium px-3 py-1 rounded-full shadow-sm">${spec}</span>` /* ألوان وظلال أفضل للتخصصات */
+                ).join('');
+
+                card.innerHTML = `
+                    <div class="flex-grow flex flex-col items-center">
+                        <img src="${company.logo}" alt="${company.name} Logo" class="w-28 h-28 rounded-full mb-4 object-cover border-4 border-blue-300 shadow-md">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-1">${company.name}</h2>
+                        <p class="text-gray-600 font-semibold mb-2 flex items-center justify-center">
+                            <svg class="w-4 h-4 mr-1 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>
+                            ${company.city}
+                        </p>
+                        <p class="text-gray-700 text-base mb-4 mt-2"><strong>التفاصيل:</strong> ${company.jobDetails}</p>
+                        <p class="text-gray-600 flex-grow mb-4 text-sm leading-relaxed">${company.description}</p>
+                        
+                        <div class="text-sm text-gray-600 mb-4 w-full">
+                            <p class="flex items-center justify-center mb-2">
+                                <svg class="w-4 h-4 mr-1 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
+                                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+                                </svg>
+                                <span>${company.contactEmail}</span>
+                            </p>
+                            <p class="flex items-center justify-center">
+                                <svg class="w-4 h-4 mr-1 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path>
+                                    <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span>${company.workingHours}</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="px-6 pt-4 pb-5 bg-gray-50 border-t border-gray-100 mt-auto">
+                        <div class="flex flex-wrap justify-center gap-2 mb-4">
+                            ${specialtiesHtml}
+                        </div>
+                        <a href="tel:${company.contactPhone}" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-lg font-medium rounded-full shadow-lg text-white contact-button hover:scale-105 transition duration-300 ease-in-out">
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
+                            </svg>
+                            اتصل بنا
+                        </a>
+                    </div>
+                `;
+                
+                resultsContainer.appendChild(card);
+            });
+        }
+
+        // --- دالة لتطبيق جميع الفلاتر والبحث ---
+        function applyFilters() {
+            const searchQuery = searchInput.value.toLowerCase().trim();
+            const selectedCity = cityFilter.value;
+            const selectedSpecialty = specialtyFilter.value;
+            
+            const filteredCompanies = companies.filter(company => {
+                const nameMatch = company.name.toLowerCase().includes(searchQuery);
+                const cityMatch = !selectedCity || company.city === selectedCity;
+                const specialtyMatch = !selectedSpecialty || company.specialties.includes(selectedSpecialty);
+                
+                return nameMatch && cityMatch && specialtyMatch;
+            });
+            
+            displayCompanies(filteredCompanies);
+        }
+
+        // --- إعادة تعيين جميع الفلاتر ---
+        function resetFilters() {
+            searchInput.value = '';
+            cityFilter.value = '';
+            specialtyFilter.value = '';
+            applyFilters();
+        }
+
+        // --- إضافة مستمعي الأحداث ---
+        searchInput.addEventListener('input', applyFilters);
+        cityFilter.addEventListener('change', applyFilters);
+        specialtyFilter.addEventListener('change', applyFilters);
+        resetButton.addEventListener('click', resetFilters);
+
+        // --- تهيئة التطبيق عند تحميل الصفحة ---
+        window.onload = () => {
+            populateFilters();
+            displayCompanies(companies);
+        };
+    </script>
+
+</body>
+</html>
